@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
+import { BsHeartFill, BsHeart } from 'react-icons/bs'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -40,8 +41,25 @@ function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [books, setBooks] = useState<Book[]>([]);
   const [loadStatus, setLoadStatus] = useState(false);
+  const [favouriteBooks, setFavouriteBooks] = useState<Book[]>([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  // get the favorite books from local storage
+  useEffect(() => {
+    const favBooks = localStorage.getItem('readingList');
+    if (favBooks) {
+      setFavouriteBooks(JSON.parse(favBooks));
+    }
+  }, []);
 
 
+  // Update localStorage whenever favourite books change
+  useEffect(() => {
+    localStorage.setItem('readingList', JSON.stringify(favouriteBooks));
+    console.log("favouriteBooks on localStorage useEffect:", JSON.stringify(favouriteBooks))
+  }, [favouriteBooks]);
+
+  // on click of search icon or enter key - it will search for the books
   const searchBook = async () => {
     // console.log("search by icon:", searchQuery)
 
@@ -59,6 +77,15 @@ function Home() {
       setLoadStatus(false);
     }
   }
+
+  // on click of favorite icon - it will add the book to favorite list
+  const addToFavorite = (book: Book) => {
+    // setIsFavorite(true)
+    console.log("add to favorite:", book)
+    setFavouriteBooks([...favouriteBooks, book]);
+    console.log("favouriteBooks:", favouriteBooks)
+  }
+
 
   return (
     <div className={style.wrapper}>
@@ -106,11 +133,20 @@ function Home() {
                     <div className="card-body">
                       <h2 className="card-title"> {book.volumeInfo.title}</h2>
                       <p>By {book.volumeInfo.authors}</p>
-                      <p> Published By : {book.volumeInfo.publisher}</p>
+                      <p className='text-gray-600'> Published By : {book.volumeInfo.publisher}</p>
                       <div className='text-xs font-bold'>{book.volumeInfo.publishedDate}</div>
-                      <div className="card-actions justify-end">
-                        <a href={book.volumeInfo?.canonicalVolumeLink} className="bg-[#ADFF01] rounded p-2 px-4" >Know More</a>
+                      <div className='flex'>
+                        <div className="card-actions">
+                          <a href={book.volumeInfo?.canonicalVolumeLink} className="bg-[#ADFF01] rounded p-2 px-4" >Know More</a>
+                        </div>
+                        <div className='pl-5 justify-end'>
+                          {
+                            isFavorite ? <BsHeartFill onClick={() => setIsFavorite(false)} /> : <BsHeart onClick={()=> addToFavorite(book)} />
+                          }
+                        
+                        </div>
                       </div>
+
                     </div>
                   </div>
 
