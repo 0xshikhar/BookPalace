@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const style = {
   wrapper: `min-h-screen pb-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900 via-gray-900 to-black`,
@@ -24,11 +25,16 @@ interface Book {
     publisher: string;
     publishedDate: string;
     description: string;
-  };
-  // imageLinks: {
-  //   medium: string;
-  // };
-}
+    imageLinks: {
+      smallThumbnail: string;
+      thumbnail: string;
+      small: string;
+      medium: string;
+    };
+    canonicalVolumeLink: string;
+  }
+};
+
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,7 +43,7 @@ function Home() {
 
 
   const searchBook = async () => {
-    console.log("icon:", searchQuery)
+    // console.log("search by icon:", searchQuery)
 
     try {
       const response = await axios.get(
@@ -46,6 +52,7 @@ function Home() {
 
       setBooks(response.data.items);
       console.log("response", response);
+      console.log("books", response.data.items);
       setLoadStatus(true);
     } catch (error) {
       console.error('Error fetching books:', error);
@@ -72,41 +79,55 @@ function Home() {
                     placeholder="Search for any NFT Collection on Mantle Chain" onClick={searchCollection()}
                 /> */}
               <input className={style.searchInput} type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onKeyPress={(e) => {
-                if (e.key === 'Enter')
+                if (e.key === 'Enter') {
                   console.log("Enter key pressed:", searchQuery)
-                searchBook()
+                  searchBook()
+                }
+
               }} />
-              {/* <Link href={/collections/{searchQuery}} > */}
-              {/* <button onClick={() => {
-                router.push(`/collections/${searchQuery}`);
-              }} className="text-white px-2">Search</button> */}
-              {/* </Link> */}
             </div>
-            {/* <Link href="/explore" className="inline-flex justify-center align-middle items-center p-5 text-lg font-medium text-center text-white bg-black rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" >
-              Join Current Live Event
-              <BsFillArrowRightCircleFill className="ml-3" />
-            </Link> */}
+
           </div>
         </figure>
 
         {/* displaying books here */}
         {loadStatus &&
-          <div className="text-white">
-            <ul>
-              {books && books.slice(0, 5).map((book) => (
-                <li key={book.id}>
+          <div className="flex flex-row justify-normal align-baseline  text-black p-12">
 
-                  <div>Book Name: {book.volumeInfo.title}</div>
-                  <div>Book Author: {book.volumeInfo.authors}</div>
-                  <div>Book Publisher: {book.volumeInfo.publisher}</div>
-                  <div>Book Published Date: {book.volumeInfo.publishedDate}</div>
-                  {/* <div>Book Description: {book.volumeInfo.description}</div> */}
-                  {/* <div>Book Image: <img src={book.imageLinks.medium} alt="google book" /></div> */}
-                </li>
-              ))}
-            </ul>
+            {books && books.slice(0, 5).map((book) => (
+              <li key={book.id}>
+                <div className="p-4">
+                  <div className="card w-[240px] bg-base-100 shadow-xl">
+                    <figure>
+                      {book.volumeInfo?.imageLinks?.thumbnail && (
+                        <img src={book.volumeInfo.imageLinks.thumbnail} alt="google api books" />
+                      )}
+                    </figure>
+                    <div className="card-body">
+                      <h2 className="card-title"> {book.volumeInfo.title}</h2>
+                      <p>By {book.volumeInfo.authors}</p>
+                      <p> Published By : {book.volumeInfo.publisher}</p>
+                      <div className='text-xs font-bold'>{book.volumeInfo.publishedDate}</div>
+                      <div className="card-actions justify-end">
+                        <a href={book.volumeInfo?.canonicalVolumeLink} className="bg-[#ADFF01] rounded p-2 px-4" >Know More</a>
+                      </div>
+                    </div>
+                  </div>
 
-          </div>}
+                  {/* <div>Book Name: {book.volumeInfo.title}</div>
+                    <div>Book Author: {book.volumeInfo.authors}</div>
+                    <div>Book Publisher: {book.volumeInfo.publisher}</div>
+                    <div>Book Published Date: {book.volumeInfo.publishedDate}</div> 
+                    <div>Book Description: {book.volumeInfo.description}</div>
+                    <div><img src={book.volumeInfo.imageLinks.small} alt="google book" /></div> 
+                  */}
+                </div>
+              </li>
+            ))}
+
+
+          </div>
+        }
 
       </div>
     </div>
