@@ -10,6 +10,7 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
+        <div className='text-[53px] bg-red-400'> Hello World</div>
         <a
           className="App-link"
           href="https://reactjs.org"
