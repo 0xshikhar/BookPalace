@@ -7,7 +7,6 @@ import Home from './Home'
 import Header from './components/Header'
 
 class App extends React.Component {
-  
   render() {
     return (
       <Router>

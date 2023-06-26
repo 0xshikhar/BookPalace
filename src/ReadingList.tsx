@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+// created a Book interface
 interface Book {
     id: string;
     volumeInfo: {
@@ -18,10 +19,9 @@ interface Book {
     }
 };
 
-
-function ReadingList() {
+// created a ReadingList component
+const ReadingList = () => {
     const [favouriteBooks, setFavouriteBooks] = useState<Book[]>([]);
-    // const [isFavorite, setIsFavorite] = useState(false);
 
     // get the favorite books from local storage
     useEffect(() => {
@@ -29,16 +29,16 @@ function ReadingList() {
         if (favBooks) {
             setFavouriteBooks(JSON.parse(favBooks));
         }
-        console.log("favouriteBooks on localStorage useEffect:", favBooks)
+        // just for testing purpose
+        // console.log("favouriteBooks on localStorage useEffect:", favBooks)
     }, []);
 
     return (
         <div className="min-h-screen pb-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900 via-gray-900 to-black">
-            <div className='md:mb-8 mb-6 md:pb-2 bg-gradient-to-r from-[#ADFF01] via-gray-400 to-gray-200 bg-clip-text text-transparent xl:text-[4rem] md:text-5xl font-bold font-polySans md:max-w-5xl text-center text-[22px] max-w-[575px]'>
+            <div className='align-cente pr-10 pb-3 text-right text-[22px] max-w-[575px] align-middle bg-gradient-to-r from-[#ADFF01] via-gray-400 to-gray-200 bg-clip-text text-transparent xl:text-[4rem] md:text-5xl font-bold font-polySans md:max-w-5xl '>
                 Your Reading List
             </div>
-            <div className="flex text-black p-12">
-
+            <div className="flex flex-wrap p-10">
                 {favouriteBooks && favouriteBooks.map((book) => (
                     <li key={book.id}>
                         <div className="p-4 flex">
@@ -57,24 +57,12 @@ function ReadingList() {
                                         <div className="card-actions">
                                             <a href={book.volumeInfo?.canonicalVolumeLink} className="bg-[#ADFF01] rounded p-2 px-4" >Know More</a>
                                         </div>
-
                                     </div>
-
                                 </div>
                             </div>
-
-                            {/* <div>Book Name: {book.volumeInfo.title}</div>
-        <div>Book Author: {book.volumeInfo.authors}</div>
-        <div>Book Publisher: {book.volumeInfo.publisher}</div>
-        <div>Book Published Date: {book.volumeInfo.publishedDate}</div> 
-        <div>Book Description: {book.volumeInfo.description}</div>
-        <div><img src={book.volumeInfo.imageLinks.small} alt="google book" /></div> 
-      */}
                         </div>
                     </li>
                 ))}
-
-
             </div>
         </div >
     );

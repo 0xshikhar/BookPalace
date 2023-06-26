@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { BsHeartFill, BsHeart } from 'react-icons/bs'
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
+// defined tailwind css classes here - for the sake of simplicity
 const style = {
   wrapper: `min-h-screen pb-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900 via-gray-900 to-black`,
   container: `flex flex-col items-center justify-center pt-10 `,
@@ -18,6 +18,7 @@ const style = {
   headerIcon: `text-[#8a939b] text-3xl font-black px-4 hover:text-white cursor-pointer`,
 }
 
+// created a Book interface to define the type of data we will be getting from the API
 interface Book {
   id: string;
   volumeInfo: {
@@ -36,8 +37,9 @@ interface Book {
   }
 };
 
-
-function Home() {
+// created a Home component -- main component
+// used console.log for testing purpose & defining the flow of the app data
+const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [books, setBooks] = useState<Book[]>([]);
   const [loadStatus, setLoadStatus] = useState(false);
@@ -56,7 +58,7 @@ function Home() {
   // Update localStorage whenever favourite books change
   useEffect(() => {
     localStorage.setItem('readingList', JSON.stringify(favouriteBooks));
-    console.log("favouriteBooks on localStorage useEffect:", JSON.stringify(favouriteBooks))
+    // console.log("favouriteBooks on localStorage useEffect:", JSON.stringify(favouriteBooks))
   }, [favouriteBooks]);
 
   // on click of search icon or enter key - it will search for the books
@@ -121,15 +123,20 @@ function Home() {
         {loadStatus &&
           <div className="flex flex-row justify-normal align-baseline  text-black p-12">
 
+            {/* mapping five books objects from the books variable  */}
             {books && books.slice(0, 5).map((book) => (
               <li key={book.id}>
                 <div className="p-4">
+
+                  {/* displaying book data in card like tailwind components */}
                   <div className="card w-[240px] bg-base-100 shadow-xl">
                     <figure>
+                      {/* checking book image links => if there is a link, image will be displayed*/}
                       {book.volumeInfo?.imageLinks?.thumbnail && (
                         <img src={book.volumeInfo.imageLinks.thumbnail} alt="google api books" />
                       )}
                     </figure>
+
                     <div className="card-body">
                       <h2 className="card-title"> {book.volumeInfo.title}</h2>
                       <p>By {book.volumeInfo.authors}</p>
@@ -137,13 +144,13 @@ function Home() {
                       <div className='text-xs font-bold'>{book.volumeInfo.publishedDate}</div>
                       <div className='flex'>
                         <div className="card-actions">
-                          <a href={book.volumeInfo?.canonicalVolumeLink} className="bg-[#ADFF01] rounded p-2 px-4" >Know More</a>
+                          <a href={book.volumeInfo?.canonicalVolumeLink} rel="noreferrer" target={'_blank'} className="bg-[#ADFF01] rounded p-2 px-4" >Know More</a>
                         </div>
                         <div className='pl-5 justify-end'>
                           {
-                            isFavorite ? <BsHeartFill onClick={() => setIsFavorite(false)} /> : <BsHeart onClick={()=> addToFavorite(book)} />
+                            isFavorite ? <BsHeartFill onClick={() => setIsFavorite(false)} /> : <BsHeart onClick={() => addToFavorite(book)} />
                           }
-                        
+
                         </div>
                       </div>
 
