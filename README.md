@@ -1,8 +1,39 @@
-# Getting Started with Create React App
+# Book Palace Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Project Description
+Book Palace is a react-based application built using the Google Books API. The application allows users to search for books and save them to a local database of the browser. Users can also view their saved books and delete them from the database.
 
-## Available Scripts
+### Deployed Application
+Application is deployed on Vercel using Github.
+[Book Palace](https://bookpalace.vercel.app/)
+
+
+### Features
+
+* Search for books using the Google Books API
+* Display a list of 5 books matching the query search by user
+* View book details like Book Name, Author, Description, Book Image, Link to the book for further details
+* Save books to a local database
+* View saved books in Reading list from the local browser database
+
+## Technologies Used
+
+* React - JavaScript library for building user interfaces
+* Typescript - Programming language for writing type safe JavaScript code (to handle edge cases and errors in better way)
+* React Router - Routing and navigation for React apps
+* Tailwind CSS - CSS framework
+* Google Books API - API to search for books from Google Cloud Store
+* Axios - Promise based HTTP client for the browser and node.js
+
+## Images
+
+**Home Page**
+![Home Page Image](/images/bookPalace-1.png)
+
+**Reading List**
+![Reading List Image](/images/bookPalace-2.png)
+
+## Installation & Project Setup
 
 In the project directory, you can run:
 
